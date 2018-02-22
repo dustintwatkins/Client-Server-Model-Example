@@ -63,6 +63,7 @@ int main(int argc, char *argv[]) {
 	/* Send remaining command-line arguments as separate
 	   datagrams, and read responses from server */
 
+
 	for (j = 3; j < argc; j++) {
 		len = strlen(argv[j]) + 1;
 		/* +1 for terminating null byte */
@@ -72,12 +73,13 @@ int main(int argc, char *argv[]) {
 					"Ignoring long message in argument %d\n", j);
 			continue;
 		}
+		sleep(2);
 
 		if (write(sfd, argv[j], len) != len) {
 			fprintf(stderr, "partial/failed write\n");
 			exit(EXIT_FAILURE);
 		}
-
+/*
 		nread = read(sfd, buf, BUF_SIZE);
 		if (nread == -1) {
 			perror("read");
@@ -85,8 +87,8 @@ int main(int argc, char *argv[]) {
 		}
 
 		printf("Received %zd bytes: %s\n", nread, buf);
+		*/
 	}
 
 	exit(EXIT_SUCCESS);
 }
-
