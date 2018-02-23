@@ -63,18 +63,23 @@ int main(int argc, char *argv[]) {
 
 	/* Read datagrams and echo them back to sender */
 
-	listen(atoi(argv[1]), 100);
-	peer_addr_len = sizeof(struct sockaddr_storage);
-	accept(atoi(argv[1]), (struct sockaddr *) &peer_addr, &peer_addr_len);
+	//listen(listen_fd, 10);
+
+  //comm_fd = accept(listen_fd, (struct sockaddr*) NULL, NULL);
+
+	listen(sfd, 100);
+	//peer_addr_len = sizeof(struct sockaddr_storage);
+	sfd = accept(atoi(argv[1]), (struct sockaddr *) NULL, NULL);
+	//accept(atoi(argv[1]), (struct sockaddr *) &peer_addr, &peer_addr_len);
 	for (;;) {
-		//peer_addr_len = sizeof(struct sockaddr_storage);
+		peer_addr_len = sizeof(struct sockaddr_storage);
 		nread = recv(sfd, buf, BUF_SIZE, 0);
 				//(struct sockaddr *) &peer_addr, &peer_addr_len);
-		/*if (nread == -1)
-			continue;*/               /* Ignore failed request */
+		if (nread == -1)
+			continue;               /* Ignore failed request */
 
-			if(nread == 0)
-				break;
+		if(nread == 0)
+			break;
 
 		char host[NI_MAXHOST], service[NI_MAXSERV];
 
