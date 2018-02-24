@@ -7,7 +7,7 @@
 #include <string.h>
 
 
-#define BUF_SIZE 500
+#define BUF_SIZE 4096
 
 int main(int argc, char *argv[]) {
 	struct addrinfo hints;
@@ -63,7 +63,7 @@ int main(int argc, char *argv[]) {
 	/* Send remaining command-line arguments as separate
 	   datagrams, and read responses from server */
 
-	fread(buf, 4096, sizeof(char), stdin);
+	fread(&buf, (size_t)BUF_SIZE, (size_t)sizeof('c'), stdin);
 	len = strlen(buf);
 	write(sfd, buf, len);
 	/*for (j = 3; j < argc; j++) {
