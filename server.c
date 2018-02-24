@@ -6,12 +6,13 @@
 #include <sys/socket.h>
 #include <netdb.h>
 
+
 #define BUF_SIZE 500
 
 int main(int argc, char *argv[]) {
 	struct addrinfo hints;
 	struct addrinfo *result, *rp;
-	int sfd, s;
+	int sfd, s, client_fd;
 	struct sockaddr_storage peer_addr;
 	socklen_t peer_addr_len;
 	ssize_t nread;
@@ -68,12 +69,13 @@ int main(int argc, char *argv[]) {
   //comm_fd = accept(listen_fd, (struct sockaddr*) NULL, NULL);
 
 	listen(sfd, 100);
-	//peer_addr_len = sizeof(struct sockaddr_storage);
-	sfd = accept(atoi(argv[1]), (struct sockaddr *) NULL, NULL);
-	//accept(atoi(argv[1]), (struct sockaddr *) &peer_addr, &peer_addr_len);
+	peer_addr_len = sizeof(struct sockaddr_storage);
+
+	client_fd = accept(sfd, (struct sockaddr *) &peer_addr, &peer_addr_len);
+
 	for (;;) {
 		peer_addr_len = sizeof(struct sockaddr_storage);
-		nread = recv(sfd, buf, BUF_SIZE, 0);
+		nread = recv(client_fd, buf, BUF_SIZE, 0);
 				//(struct sockaddr *) &peer_addr, &peer_addr_len);
 		if (nread == -1)
 			continue;               /* Ignore failed request */
@@ -92,9 +94,11 @@ int main(int argc, char *argv[]) {
 		else
 			fprintf(stderr, "getnameinfo: %s\n", gai_strerror(s));
 
-		if (sendto(sfd, buf, nread, 0,
-					(struct sockaddr *) &peer_addr,
-					peer_addr_len) != nread)
+		int send = sendto(client_fd, buf, nread, 0,
+						(struct sockaddr *) &peer_addr, peer_addr_len);
+
+		if (send != nread){
 			fprintf(stderr, "Error sending response\n");
+		}
 	}
 }

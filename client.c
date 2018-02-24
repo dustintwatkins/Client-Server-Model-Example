@@ -60,36 +60,40 @@ int main(int argc, char *argv[]) {
 	}
 
 	freeaddrinfo(result);           /* No longer needed */
-
 	/* Send remaining command-line arguments as separate
 	   datagrams, and read responses from server */
 
-
-	for (j = 3; j < argc; j++) {
+	fread(buf, 4096, sizeof(char), stdin);
+	len = strlen(buf);
+	write(sfd, buf, len);
+	/*for (j = 3; j < argc; j++) {
 		len = strlen(argv[j]) + 1;
 		/* +1 for terminating null byte */
 
-		if (len + 1 > BUF_SIZE) {
+		/*if (len + 1 > BUF_SIZE) {
 			fprintf(stderr,
 					"Ignoring long message in argument %d\n", j);
 			continue;
 		}
-		sleep(2);
+		//sleep(2);
+		fread(buf, BUF_SIZE, sizeof(char), stdin);
 
-		if (write(sfd, argv[j], len) != len) {
+		write(sfd, buf, len);*/
+
+			/*		if (write(sfd, argv[j], len) != len) {
 			fprintf(stderr, "partial/failed write\n");
 			exit(EXIT_FAILURE);
-		}
-/*
-		nread = read(sfd, buf, BUF_SIZE);
+		}*/
+
+		/*nread = read(sfd, buf, BUF_SIZE);
 		if (nread == -1) {
 			perror("read");
 			exit(EXIT_FAILURE);
 		}
 
 		printf("Received %zd bytes: %s\n", nread, buf);
-		*/
-	}
+
+	}*/
 
 	exit(EXIT_SUCCESS);
 }
