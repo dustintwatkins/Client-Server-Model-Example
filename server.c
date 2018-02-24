@@ -85,6 +85,7 @@ int main(int argc, char *argv[]) {
 
 		char host[NI_MAXHOST], service[NI_MAXSERV];
 
+
 		s = getnameinfo((struct sockaddr *) &peer_addr,
 				peer_addr_len, host, NI_MAXHOST,
 				service, NI_MAXSERV, NI_NUMERICSERV);
